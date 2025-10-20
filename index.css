@@ -1,0 +1,190 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    padding-top: 80px;
+}
+
+.parallax {
+    position: relative;
+    height: calc(100vh - 80px);
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 3rem;
+    text-shadow:
+        5px 5px 10px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.8),
+        0 0 25px rgba(0, 255, 255, 0.7),
+        0 0 30px rgba(0, 255, 255, 0.5);
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background-color: #002fa7;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    box-sizing: border-box;
+    z-index: 100;
+    transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+    justify-content: space-between;
+}
+
+.site-header.scrolled {
+    background-color: rgba(0, 47, 167, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    border-radius: 8px;
+}
+
+.site-name {
+    /* 应用新字体 */
+    font-family: 'Ma Shan Zheng', cursive;
+    color: #ffffff;
+    /* 适当调大一点字号以配合新字体的风格 */
+    font-size: 2.2rem;
+    /* 移除了加粗，因为这款字体本身就很有力 */
+    /* font-weight: bold; */
+    text-shadow:
+        1px 1px 3px rgba(0, 0, 0, 0.6),
+        0 0 3px rgba(255, 255, 255, 0.5),
+        0 0 15px rgba(173, 216, 230, 0.4);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.action-item {
+    position: relative;
+}
+
+.action-icon {
+    height: 32px;
+    width: 32px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.action-icon:hover {
+    transform: scale(1.1);
+}
+
+.qr-popup {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 50px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 160px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* === 新增的滚动时强制隐藏样式 === */
+.qr-popup.hide-on-scroll {
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+.action-item:last-child .qr-popup {
+    right: 0;
+    transform: translateX(0);
+}
+
+.qr-popup img {
+    width: 100%;
+    display: block;
+}
+
+.qr-popup p {
+    margin: 10px 0 0 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.action-item:hover .qr-popup {
+    visibility: visible;
+    opacity: 1;
+}
+
+@media screen and (max-width: 600px) {
+    .content {
+        font-size: 2rem;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    .site-name {
+        font-size: 1.8rem;
+    }
+
+    .site-header {
+        padding: 0 15px;
+    }
+
+    .header-actions {
+        gap: 15px;
+    }
+
+    .action-icon {
+        height: 28px;
+        width: 28px;
+    }
+
+    .qr-popup {
+        right: 0;
+        left: auto;
+        transform: translateX(0);
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1200px) {
+    .content {
+        font-size: 3rem;
+    }
+}
+
+@media screen and (min-width: 1201px) {
+    .content {
+        font-size: 4rem;
+    }
+}
