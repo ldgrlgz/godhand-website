@@ -20,7 +20,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-size: 3rem;
+    font-size: clamp(0.8rem, 0.5rem + 2.5vw, 3.5rem);
     text-shadow:
         5px 5px 10px rgba(0, 0, 0, 0.9),
         0 0 30px rgba(255, 255, 255, 0.8),
@@ -67,13 +67,9 @@ body {
 }
 
 .site-name {
-    /* 应用新字体 */
     font-family: 'Ma Shan Zheng', cursive;
     color: #ffffff;
-    /* 适当调大一点字号以配合新字体的风格 */
     font-size: 2.2rem;
-    /* 移除了加粗，因为这款字体本身就很有力 */
-    /* font-weight: bold; */
     text-shadow:
         1px 1px 3px rgba(0, 0, 0, 0.6),
         0 0 3px rgba(255, 255, 255, 0.5),
@@ -97,10 +93,7 @@ body {
     transition: transform 0.2s ease;
 }
 
-.action-icon:hover {
-    transform: scale(1.1);
-}
-
+/* 默认隐藏二维码 */
 .qr-popup {
     visibility: hidden;
     opacity: 0;
@@ -115,17 +108,31 @@ body {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     text-align: center;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-/* === 新增的滚动时强制隐藏样式 === */
-.qr-popup.hide-on-scroll {
-    visibility: hidden !important;
-    opacity: 0 !important;
+    pointer-events: none;
 }
 
 .action-item:last-child .qr-popup {
     right: 0;
     transform: translateX(0);
+}
+
+/* === 核心修改 1：仅在能悬浮的设备（桌面端）上启用 hover === */
+@media (hover: hover) and (min-width: 601px) {
+    .action-item:hover .qr-popup {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .action-icon:hover {
+        transform: scale(1.1);
+    }
+}
+
+/* === 核心修改 2：用于 JS 在触摸屏上控制的显示类 === */
+.qr-popup.is-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .qr-popup img {
@@ -139,16 +146,8 @@ body {
     color: #333;
 }
 
-.action-item:hover .qr-popup {
-    visibility: visible;
-    opacity: 1;
-}
-
+/* 手机端布局调整 */
 @media screen and (max-width: 600px) {
-    .content {
-        font-size: 2rem;
-    }
-
     .logo {
         height: 40px;
     }
@@ -174,17 +173,5 @@ body {
         right: 0;
         left: auto;
         transform: translateX(0);
-    }
-}
-
-@media screen and (min-width: 601px) and (max-width: 1200px) {
-    .content {
-        font-size: 3rem;
-    }
-}
-
-@media screen and (min-width: 1201px) {
-    .content {
-        font-size: 4rem;
     }
 }

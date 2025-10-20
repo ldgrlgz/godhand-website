@@ -15,71 +15,62 @@
 <body>
 
     <header class="site-header">
-        <!-- 左侧内容：Logo和名称 -->
         <div class="header-content">
             <img src="images/logo.png" alt="妙眼极灵 Logo" class="logo">
             <span class="site-name">妙眼极灵</span>
         </div>
-
-        <!-- 右侧图标区域 -->
         <div class="header-actions">
-            <!-- 小程序图标和二维码 -->
             <div class="action-item">
-                <img src="https://res.wx.qq.com/mmbizwxampnodelogicsvr_node/dist/images/menu_logo_8363f4.svg" alt="小程序"
-                    class="action-icon">
-                <div class="qr-popup">
+                <a id="weapp-link" href="javascript:void(0);">
+                    <img src="https://res.wx.qq.com/mmbizwxampnodelogicsvr_node/dist/images/menu_logo_8363f4.svg"
+                        alt="小程序" class="action-icon">
+                </a>
+                <div class="qr-popup" id="weapp-qr-popup">
                     <img src="images/mini_program_qr.jpg" alt="小程序二维码">
                     <p>微信扫码打开小程序</p>
                 </div>
             </div>
-
-            <!-- App下载图标和二维码 -->
             <div class="action-item">
-                <!-- === 修改点：将图标地址换成你提供的安卓 SVG 链接 === -->
-                <img src="https://developer.android.google.cn/images/logos/android.svg" alt="App下载" class="action-icon">
-                <div class="qr-popup">
+                <a id="app-link" href="javascript:void(0);">
+                    <img src="https://developer.android.google.cn/images/logos/android.svg" alt="App下载"
+                        class="action-icon">
+                </a>
+                <div class="qr-popup" id="app-qr-popup">
                     <img src="images/mini_program_qr.jpg" alt="App下载二维码">
                     <p>扫码下载官方App</p>
                 </div>
             </div>
         </div>
-
     </header>
 
-    <div class="parallax" style="background-image: url('images/unibg.jpg');">
+    <!-- ... (所有 parallax div 内容保持不变) ... -->
+    <div class="parallax" style="background-image: url('images/unibg.png');">
         <div class="content">“生活中的一切都会变的很简单”</div>
     </div>
-
     <div class="parallax" style="background-image: url('images/minibg.png');">
         <div class="content">“在数字的星河里留下属于我们的唯一”</div>
     </div>
-
     <div class="parallax" style="background-image: url('images/first.jpeg');">
         <div class="content">“大自然是最好的艺术家”</div>
     </div>
-
     <div class="parallax" style="background-image: url('images/second.webp');">
         <div class="content">“城市的每一个角落都有故事”</div>
     </div>
-
     <div class="parallax" style="background-image: url('images/third.png');">
         <div class="content">“科技让生活更美好”</div>
     </div>
-
     <div class="parallax" style="background-image: url('images/fourth.png');">
         <div class="content">“海洋是生命的摇篮”</div>
     </div>
-
     <div class="parallax" style="background-image: url('images/fifth.png');">
         <div class="content">“山脉是大地的脊梁”</div>
     </div>
 
-    <!-- 实现滚动变色效果的 JavaScript 代码 -->
+    <!-- === 最终版 JavaScript 逻辑 === -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // 滚动变色逻辑 (所有设备通用)
             const header = document.querySelector('.site-header');
-
-            // --- 导航栏滚动变色逻辑 (保持不变) ---
             window.addEventListener('scroll', function () {
                 if (window.scrollY > 10) {
                     header.classList.add('scrolled');
@@ -88,27 +79,33 @@
                 }
             });
 
-            // --- 全新：滚动时隐藏二维码的逻辑 ---
-            const actionItems = document.querySelectorAll('.action-item');
+            // 使用 matchMedia 来准确判断是否为触摸屏设备
+            const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
-            // 1. 当页面开始滚动时...
-            window.addEventListener('scroll', function () {
-                // ...遍历每一个图标项，给它内部的弹窗加上隐藏类。
-                actionItems.forEach(item => {
-                    const popup = item.querySelector('.qr-popup');
-                    popup.classList.add('hide-on-scroll');
-                });
-            });
+            // 仅在触摸屏设备上执行以下逻辑
+            if (isTouchDevice) {
+                const weappLink = document.getElementById('weapp-link');
+                const appLink = document.getElementById('app-link');
+                const weappQrPopup = document.getElementById('weapp-qr-popup');
+                const appQrPopup = document.getElementById('app-qr-popup');
 
-            // 2. 为每一个图标项添加“鼠标移出”事件
-            actionItems.forEach(item => {
-                item.addEventListener('mouseleave', function () {
-                    // 当鼠标移出图标区域时，移除隐藏类。
-                    // 这会“重置”弹窗的状态，让它可以在下一次鼠标移入时正常显示。
-                    const popup = this.querySelector('.qr-popup');
-                    popup.classList.remove('hide-on-scroll');
+                // 1. App图标直接下载，并彻底移除其二维码
+                appQrPopup.style.display = 'none';
+                appLink.href = "files/app.apk";
+
+                // 2. 小程序图标点击时，切换 is-visible 类来显示/隐藏二维码
+                weappLink.addEventListener('click', function (event) {
+                    event.preventDefault(); // 阻止a标签默认行为
+                    weappQrPopup.classList.toggle('is-visible');
                 });
-            });
+
+                // 3. 滚动时，无条件移除 is-visible 类来隐藏二维码
+                window.addEventListener('scroll', function () {
+                    weappQrPopup.classList.remove('is-visible');
+                });
+            }
+            // 对于非触摸屏设备 (桌面端)，JS 不会添加任何点击或滚动隐藏逻辑，
+            // 交互将完全由 CSS 的 hover 效果控制，确保稳定无冲突。
         });
     </script>
 
